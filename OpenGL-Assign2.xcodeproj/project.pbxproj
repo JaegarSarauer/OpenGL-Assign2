@@ -1,0 +1,357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EECEF2871E69357A0023C09A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2861E69357A0023C09A /* main.m */; };
+		EECEF28A1E69357A0023C09A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2891E69357A0023C09A /* AppDelegate.m */; };
+		EECEF28C1E69357A0023C09A /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = EECEF28B1E69357A0023C09A /* Shader.fsh */; };
+		EECEF28E1E69357A0023C09A /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = EECEF28D1E69357A0023C09A /* Shader.vsh */; };
+		EECEF2911E69357A0023C09A /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2901E69357A0023C09A /* GameViewController.m */; };
+		EECEF2941E69357A0023C09A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EECEF2921E69357A0023C09A /* Main.storyboard */; };
+		EECEF2961E69357A0023C09A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EECEF2951E69357A0023C09A /* Assets.xcassets */; };
+		EECEF2991E69357A0023C09A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EECEF2971E69357A0023C09A /* LaunchScreen.storyboard */; };
+		EECEF2A51E6936860023C09A /* DisjointSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2A11E6936860023C09A /* DisjointSet.cpp */; };
+		EECEF2A61E6936860023C09A /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2A31E6936860023C09A /* maze.cpp */; };
+		EECEF2A81E6938CC0023C09A /* MazeManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2A71E6938CC0023C09A /* MazeManager.mm */; };
+		EECEF2AC1E695A920023C09A /* MazeSquare.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2AB1E695A920023C09A /* MazeSquare.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EECEF2821E6935790023C09A /* OpenGL-Assign2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenGL-Assign2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EECEF2861E69357A0023C09A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		EECEF2881E69357A0023C09A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		EECEF2891E69357A0023C09A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		EECEF28B1E69357A0023C09A /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
+		EECEF28D1E69357A0023C09A /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
+		EECEF28F1E69357A0023C09A /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		EECEF2901E69357A0023C09A /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		EECEF2931E69357A0023C09A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EECEF2951E69357A0023C09A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EECEF2981E69357A0023C09A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		EECEF29A1E69357A0023C09A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EECEF2A11E6936860023C09A /* DisjointSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisjointSet.cpp; sourceTree = "<group>"; };
+		EECEF2A21E6936860023C09A /* DisjointSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisjointSet.h; sourceTree = "<group>"; };
+		EECEF2A31E6936860023C09A /* maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maze.cpp; sourceTree = "<group>"; };
+		EECEF2A41E6936860023C09A /* maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
+		EECEF2A71E6938CC0023C09A /* MazeManager.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MazeManager.mm; sourceTree = "<group>"; };
+		EECEF2A91E693A190023C09A /* MazeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeManager.h; sourceTree = "<group>"; };
+		EECEF2AA1E695A830023C09A /* MazeSquare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeSquare.h; sourceTree = "<group>"; };
+		EECEF2AB1E695A920023C09A /* MazeSquare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MazeSquare.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EECEF27F1E6935790023C09A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EECEF2791E6935790023C09A = {
+			isa = PBXGroup;
+			children = (
+				EECEF2841E6935790023C09A /* OpenGL-Assign2 */,
+				EECEF2831E6935790023C09A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EECEF2831E6935790023C09A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EECEF2821E6935790023C09A /* OpenGL-Assign2.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EECEF2841E6935790023C09A /* OpenGL-Assign2 */ = {
+			isa = PBXGroup;
+			children = (
+				EECEF2A01E6936620023C09A /* CPP */,
+				EECEF2881E69357A0023C09A /* AppDelegate.h */,
+				EECEF2891E69357A0023C09A /* AppDelegate.m */,
+				EECEF28B1E69357A0023C09A /* Shader.fsh */,
+				EECEF28D1E69357A0023C09A /* Shader.vsh */,
+				EECEF28F1E69357A0023C09A /* GameViewController.h */,
+				EECEF2901E69357A0023C09A /* GameViewController.m */,
+				EECEF2921E69357A0023C09A /* Main.storyboard */,
+				EECEF2951E69357A0023C09A /* Assets.xcassets */,
+				EECEF2971E69357A0023C09A /* LaunchScreen.storyboard */,
+				EECEF29A1E69357A0023C09A /* Info.plist */,
+				EECEF2851E69357A0023C09A /* Supporting Files */,
+				EECEF2A71E6938CC0023C09A /* MazeManager.mm */,
+				EECEF2A91E693A190023C09A /* MazeManager.h */,
+				EECEF2AA1E695A830023C09A /* MazeSquare.h */,
+				EECEF2AB1E695A920023C09A /* MazeSquare.m */,
+			);
+			path = "OpenGL-Assign2";
+			sourceTree = "<group>";
+		};
+		EECEF2851E69357A0023C09A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EECEF2861E69357A0023C09A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EECEF2A01E6936620023C09A /* CPP */ = {
+			isa = PBXGroup;
+			children = (
+				EECEF2A11E6936860023C09A /* DisjointSet.cpp */,
+				EECEF2A21E6936860023C09A /* DisjointSet.h */,
+				EECEF2A31E6936860023C09A /* maze.cpp */,
+				EECEF2A41E6936860023C09A /* maze.h */,
+			);
+			name = CPP;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EECEF2811E6935790023C09A /* OpenGL-Assign2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EECEF29D1E69357A0023C09A /* Build configuration list for PBXNativeTarget "OpenGL-Assign2" */;
+			buildPhases = (
+				EECEF27E1E6935790023C09A /* Sources */,
+				EECEF27F1E6935790023C09A /* Frameworks */,
+				EECEF2801E6935790023C09A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OpenGL-Assign2";
+			productName = "OpenGL-Assign2";
+			productReference = EECEF2821E6935790023C09A /* OpenGL-Assign2.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EECEF27A1E6935790023C09A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Jaegar Sarauer";
+				TargetAttributes = {
+					EECEF2811E6935790023C09A = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = EECEF27D1E6935790023C09A /* Build configuration list for PBXProject "OpenGL-Assign2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EECEF2791E6935790023C09A;
+			productRefGroup = EECEF2831E6935790023C09A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EECEF2811E6935790023C09A /* OpenGL-Assign2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EECEF2801E6935790023C09A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EECEF2941E69357A0023C09A /* Main.storyboard in Resources */,
+				EECEF28E1E69357A0023C09A /* Shader.vsh in Resources */,
+				EECEF2961E69357A0023C09A /* Assets.xcassets in Resources */,
+				EECEF2991E69357A0023C09A /* LaunchScreen.storyboard in Resources */,
+				EECEF28C1E69357A0023C09A /* Shader.fsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EECEF27E1E6935790023C09A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EECEF2A51E6936860023C09A /* DisjointSet.cpp in Sources */,
+				EECEF28A1E69357A0023C09A /* AppDelegate.m in Sources */,
+				EECEF2911E69357A0023C09A /* GameViewController.m in Sources */,
+				EECEF2A61E6936860023C09A /* maze.cpp in Sources */,
+				EECEF2AC1E695A920023C09A /* MazeSquare.m in Sources */,
+				EECEF2A81E6938CC0023C09A /* MazeManager.mm in Sources */,
+				EECEF2871E69357A0023C09A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		EECEF2921E69357A0023C09A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EECEF2931E69357A0023C09A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		EECEF2971E69357A0023C09A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EECEF2981E69357A0023C09A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EECEF29B1E69357A0023C09A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EECEF29C1E69357A0023C09A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EECEF29E1E69357A0023C09A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "OpenGL-Assign2/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.atomaton.OpenGL-Assign2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EECEF29F1E69357A0023C09A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "OpenGL-Assign2/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.atomaton.OpenGL-Assign2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EECEF27D1E6935790023C09A /* Build configuration list for PBXProject "OpenGL-Assign2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EECEF29B1E69357A0023C09A /* Debug */,
+				EECEF29C1E69357A0023C09A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EECEF29D1E69357A0023C09A /* Build configuration list for PBXNativeTarget "OpenGL-Assign2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EECEF29E1E69357A0023C09A /* Debug */,
+				EECEF29F1E69357A0023C09A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EECEF27A1E6935790023C09A /* Project object */;
+}

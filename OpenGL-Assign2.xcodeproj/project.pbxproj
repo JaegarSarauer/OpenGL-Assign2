@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE729A3E1E6E87A70079965E /* crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE729A3D1E6E87A70079965E /* crate.jpg */; };
 		EECEF2871E69357A0023C09A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2861E69357A0023C09A /* main.m */; };
 		EECEF28A1E69357A0023C09A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2891E69357A0023C09A /* AppDelegate.m */; };
 		EECEF28C1E69357A0023C09A /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = EECEF28B1E69357A0023C09A /* Shader.fsh */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EE729A3D1E6E87A70079965E /* crate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crate.jpg; sourceTree = "<group>"; };
 		EECEF2821E6935790023C09A /* OpenGL-Assign2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenGL-Assign2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EECEF2861E69357A0023C09A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EECEF2881E69357A0023C09A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		EECEF2841E6935790023C09A /* OpenGL-Assign2 */ = {
 			isa = PBXGroup;
 			children = (
+				EE729A3D1E6E87A70079965E /* crate.jpg */,
 				EECEF2A01E6936620023C09A /* CPP */,
 				EECEF2881E69357A0023C09A /* AppDelegate.h */,
 				EECEF2891E69357A0023C09A /* AppDelegate.m */,
@@ -175,6 +178,7 @@
 				EECEF2941E69357A0023C09A /* Main.storyboard in Resources */,
 				EECEF28E1E69357A0023C09A /* Shader.vsh in Resources */,
 				EECEF2961E69357A0023C09A /* Assets.xcassets in Resources */,
+				EE729A3E1E6E87A70079965E /* crate.jpg in Resources */,
 				EECEF2991E69357A0023C09A /* LaunchScreen.storyboard in Resources */,
 				EECEF28C1E69357A0023C09A /* Shader.fsh in Resources */,
 			);

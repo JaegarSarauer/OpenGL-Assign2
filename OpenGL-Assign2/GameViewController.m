@@ -16,6 +16,15 @@ enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
+    UNIFORM_MODELVIEW_MATRIX,
+    /* more uniforms needed here... */
+    UNIFORM_TEXTURE,
+    UNIFORM_FLASHLIGHT_POSITION,
+    UNIFORM_DIFFUSE_LIGHT_POSITION,
+    UNIFORM_SHININESS,
+    UNIFORM_AMBIENT_COMPONENT,
+    UNIFORM_DIFFUSE_COMPONENT,
+    UNIFORM_SPECULAR_COMPONENT,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -28,44 +37,105 @@ enum
     NUM_ATTRIBUTES
 };
 
-GLfloat gCubeVertexData[216] = 
+GLfloat gCubeVertexData[72] =
 {
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    0.51f, -0.5f, -0.5f,        1.0f, 0.0f, 0.0f,
-    0.51f, 0.5f, -0.5f,         1.0f, 0.0f, 0.0f,
-    0.51f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.51f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.51f, 0.5f, -0.5f,          1.0f, 0.0f, 0.0f,
-    0.51f, 0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    
-    0.49f, 0.5f, -0.5f,        -1.0f, 0.0f, 0.0f,
-    0.49f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
-    0.49f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
-    0.49f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
-    0.49f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
-    0.49f, -0.5f, 0.5f,        -1.0f, 0.0f, 0.0f,
-    
-    0.49f, -0.5f, -0.5f,       0.0f, -1.0f, 0.0f,
-    0.51f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
-    0.49f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
-    0.49f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
-    0.51f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
-    0.51f, -0.5f, 0.5f,         0.0f, -1.0f, 0.0f,
-    
-    0.51f, 0.5f, 0.5f,          0.0f, 0.0f, 1.0f,
-    0.49f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.51f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.51f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.49f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.49f, -0.5f, 0.5f,        0.0f, 0.0f, 1.0f,
-    
-    0.51f, -0.5f, -0.5f,        0.0f, 0.0f, -1.0f,
-    0.49f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
-    0.51f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
-    0.51f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
-    0.49f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
-    0.49f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    0.5f, -0.5f,  0.5f,
+    0.5f, -0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    0.5f,  0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, 0.5f,
+    -0.5f,  0.5f, 0.5f,
+    0.5f,  0.5f, 0.5f,
+    0.5f, -0.5f, 0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f, -0.5f,
+};
+
+GLfloat gCubeNormalData[72] = {
+    0.0f, -1.0f, 0.0f,
+    0.0f, -1.0f, 0.0f,
+    0.0f, -1.0f, 0.0f,
+    0.0f, -1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, -1.0f,
+    0.0f, 0.0f, -1.0f,
+    0.0f, 0.0f, -1.0f,
+    0.0f, 0.0f, -1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    -1.0f, 0.0f, 0.0f,
+    -1.0f, 0.0f, 0.0f,
+    -1.0f, 0.0f, 0.0f,
+    -1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+};
+
+GLfloat gCubeTexData[48] =
+{
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+    0.0f, 0.0f,
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+};
+
+GLuint cubeIndices[36] =
+{
+    0, 2, 1,
+    0, 3, 2,
+    4, 5, 6,
+    4, 6, 7,
+    8, 9, 10,
+    8, 10, 11,
+    12, 15, 14,
+    12, 14, 13,
+    16, 17, 18,
+    16, 18, 19,
+    20, 23, 22,
+    20, 22, 21
 };
 
 @interface GameViewController () {
@@ -78,8 +148,21 @@ GLfloat gCubeVertexData[216] =
     
     float _rotation;
     
+    //render data
     GLuint _vertexArray;
     GLuint _vertexBuffer;
+    GLuint _normalBuffer;
+    GLuint _textureBuffer;
+    GLuint _indexBuffer;
+    GLuint crateTexture;
+    
+    //shader data
+    GLKVector3 flashlightPosition;
+    GLKVector3 diffuseLightPosition;
+    GLKVector4 diffuseComponent;
+    float shininess;
+    GLKVector4 specularComponent;
+    GLKVector4 ambientComponent;
     
     MazeManager *maze;
     
@@ -180,22 +263,75 @@ GLfloat gCubeVertexData[216] =
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
     self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
+    uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
+    uniforms[UNIFORM_FLASHLIGHT_POSITION] = glGetUniformLocation(_program, "flashlightPosition");
+    uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION] = glGetUniformLocation(_program, "diffuseLightPosition");
+    uniforms[UNIFORM_SHININESS] = glGetUniformLocation(_program, "shininess");
+    uniforms[UNIFORM_AMBIENT_COMPONENT] = glGetUniformLocation(_program, "ambientComponent");
+    uniforms[UNIFORM_DIFFUSE_COMPONENT] = glGetUniformLocation(_program, "diffuseComponent");
+    uniforms[UNIFORM_SPECULAR_COMPONENT] = glGetUniformLocation(_program, "specularComponent");
+    
+    flashlightPosition = GLKVector3Make(0.0, 0.0, 1.0);
+    diffuseLightPosition = GLKVector3Make(0.0, 1.0, 0.0);
+    diffuseComponent = GLKVector4Make(0.8, 0.1, 0.1, 1.0);
+    shininess = 100.0;
+    specularComponent = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+    ambientComponent = GLKVector4Make(0.2, 0.2, 0.2, 1.0);
     
     glEnable(GL_DEPTH_TEST);
     
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(gCubeVertexData), gCubeVertexData, GL_STATIC_DRAW);
     
+    
+    glGenBuffers(1, &_vertexBuffer);
+    glGenBuffers(1, &_normalBuffer);
+    glGenBuffers(1, &_textureBuffer);
+    glGenBuffers(1, &_indexBuffer);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeVertexData, GL_STATIC_DRAW);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(0));
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+    
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _normalBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeNormalData, GL_STATIC_DRAW);
     glEnableVertexAttribArray(GLKVertexAttribNormal);
-    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+    
+    
+    
+    //HELLO THERE
+    
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _textureBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 48, gCubeTexData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * 36, cubeIndices, GL_STATIC_DRAW);
     
     glBindVertexArrayOES(0);
+    
+    // Load in and set texture
+    /* use setupTexture to create crate texture */
+    crateTexture = [self setupTexture:@"crate.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+
+    
+    //GOODBYE THERE
+    
+    
+    
+    
+    
+    
+    
 }
 
 - (void)tearDownGL
@@ -203,6 +339,9 @@ GLfloat gCubeVertexData[216] =
     [EAGLContext setCurrentContext:self.context];
     
     glDeleteBuffers(1, &_vertexBuffer);
+    glDeleteBuffers(1, &_normalBuffer);
+    glDeleteBuffers(1, &_textureBuffer);
+    glDeleteBuffers(1, &_indexBuffer);
     glDeleteVertexArraysOES(1, &_vertexArray);
     
     self.effect = nil;
@@ -380,7 +519,18 @@ GLfloat gCubeVertexData[216] =
                         break;
                 }
                 
-                glDrawArrays(GL_TRIANGLES, 0, 36);
+                glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
+                glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
+                glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
+                glUniform1f(uniforms[UNIFORM_SHININESS], shininess);
+                glUniform4fv(uniforms[UNIFORM_SPECULAR_COMPONENT], 1, specularComponent.v);
+                glUniform4fv(uniforms[UNIFORM_AMBIENT_COMPONENT], 1, ambientComponent.v);
+                
+                //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _textureBuffer);
+                //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+                //glDrawArrays(GL_TRIANGLES, 0, 36);
             }
         }
     }
@@ -421,6 +571,7 @@ GLfloat gCubeVertexData[216] =
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
+    glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "texCoordIn");
     
     // Link program.
     if (![self linkProgram:_program]) {
@@ -591,6 +742,38 @@ GLfloat gCubeVertexData[216] =
     mazeYPos = 2;
     mazeViewRotate = 180;
     mazeViewRotateTo = 180;
+}
+
+// Load in and set up texture image (adapted from Ray Wenderlich)
+- (GLuint)setupTexture:(NSString *)fileName
+{
+    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
+    if (!spriteImage) {
+        NSLog(@"Failed to load image %@", fileName);
+        exit(1);
+    }
+    
+    size_t width = CGImageGetWidth(spriteImage);
+    size_t height = CGImageGetHeight(spriteImage);
+    
+    GLubyte *spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
+    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
+    
+    CGContextRelease(spriteContext);
+    
+    GLuint texName;
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    
+    free(spriteData);
+    return texName;
 }
 
 @end

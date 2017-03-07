@@ -33,6 +33,18 @@ typedef enum {RIGHT = 0, UP, LEFT, DOWN} SIDE;
     
     GLKMatrix4 rightVertecies;
     GLKMatrix3 rightNormals;
+    
+    GLKMatrix4 upMinimapVerticies;
+    GLKMatrix3 upMinimapNormals;
+    
+    GLKMatrix4 downMinimapVerticies;
+    GLKMatrix3 downMinimapNormals;
+    
+    GLKMatrix4 leftMinimapVerticies;
+    GLKMatrix3 leftMinimapNormals;
+    
+    GLKMatrix4 rightMinimapVerticies;
+    GLKMatrix3 rightMinimapNormals;
 }
 
 - (id)init:(bool)r left:(bool)l up:(bool)u down:(bool)d;

@@ -32,12 +32,12 @@ GLfloat gCubeVertexData[216] =
 {
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    0.5f, -0.5f, -0.5f,        1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, -0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, -0.5f,          1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    0.51f, -0.5f, -0.5f,        1.0f, 0.0f, 0.0f,
+    0.51f, 0.5f, -0.5f,         1.0f, 0.0f, 0.0f,
+    0.51f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    0.51f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    0.51f, 0.5f, -0.5f,          1.0f, 0.0f, 0.0f,
+    0.51f, 0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
     
     0.49f, 0.5f, -0.5f,        -1.0f, 0.0f, 0.0f,
     0.49f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
@@ -47,23 +47,23 @@ GLfloat gCubeVertexData[216] =
     0.49f, -0.5f, 0.5f,        -1.0f, 0.0f, 0.0f,
     
     0.49f, -0.5f, -0.5f,       0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
+    0.51f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
     0.49f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
     0.49f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, -1.0f, 0.0f,
+    0.51f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
+    0.51f, -0.5f, 0.5f,         0.0f, -1.0f, 0.0f,
     
-    0.5f, 0.5f, 0.5f,          0.0f, 0.0f, 1.0f,
+    0.51f, 0.5f, 0.5f,          0.0f, 0.0f, 1.0f,
     0.49f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    0.51f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    0.51f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
     0.49f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
     0.49f, -0.5f, 0.5f,        0.0f, 0.0f, 1.0f,
     
-    0.5f, -0.5f, -0.5f,        0.0f, 0.0f, -1.0f,
+    0.51f, -0.5f, -0.5f,        0.0f, 0.0f, -1.0f,
     0.49f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
-    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
-    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
+    0.51f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
+    0.51f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
     0.49f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
     0.49f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
 };
@@ -86,6 +86,7 @@ GLfloat gCubeVertexData[216] =
     int mazeXPos;
     int mazeYPos;
     float mazeViewRotate;
+    float mazeViewRotateTo;
     
     bool showConsole;
     __weak IBOutlet UIView *ConsoleElement;
@@ -120,6 +121,10 @@ GLfloat gCubeVertexData[216] =
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    mazeXPos = 0;
+    mazeYPos = 2;
+    mazeViewRotate = 180;
+    mazeViewRotateTo = 180;
     
     maze = [[MazeManager alloc]init];
     [maze createMaze];
@@ -213,7 +218,11 @@ GLfloat gCubeVertexData[216] =
 - (void)update
 {
     float aspect = fabs(self.view.bounds.size.width / self.view.bounds.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(120), aspect, 0.001f, 100.0f);
+    //used in real world viewing
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(70), aspect, 0.001f, 100.0f);
+    
+    //used in minimap viewing
+    GLKMatrix4 orthoMatrix = GLKMatrix4MakeOrtho(-maze->mazeWidth * aspect, maze->mazeWidth * aspect, -maze->mazeHeight, maze->mazeHeight, 0.001f, 100.0f);
     
 
     self.effect.transform.projectionMatrix = projectionMatrix;
@@ -223,15 +232,30 @@ GLfloat gCubeVertexData[216] =
             for (int s = 0; s < SQUARE_SIDES; s++) {
                 //for (int = 0; i < MazeSquare.SIDE)
                 //real position
-                GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(mazeXPos + x, -6.0f, mazeYPos + y);
-
-                GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(-(mazeXPos + x), 6.0f, -(mazeYPos + y));
+                GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation( mazeXPos + x, 0.0f, mazeYPos + y);
+                GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(-(mazeXPos + x), 0.0f, -(mazeYPos + y));
                 modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, baseModelViewMatrix);
+                
                 GLKMatrix4 rotateMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(mazeViewRotate), 0.0f, 1.0f, 0.0f);
-                rotateMatrix = GLKMatrix4Rotate(rotateMatrix, GLKMathDegreesToRadians(90), 1.0f, 0.0f, 0.0f);//debug
-
                 GLKMatrix4 finalMatrix =GLKMatrix4Multiply(rotateMatrix, baseModelViewMatrix);
                 finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
+                
+                //minimap
+                GLKMatrix4 minimapFinal = GLKMatrix4Identity;
+                if (!ConsoleElement.hidden) {
+                    GLKMatrix4 baseMinimapViewMatrix = GLKMatrix4MakeTranslation(-ceil(maze->mazeWidth / 2) + x, -10.0f, -ceil(maze->mazeHeight / 2) + y);
+                    GLKMatrix4 minimapViewMatrix = GLKMatrix4MakeTranslation(-(-ceil(maze->mazeWidth / 2) + x), 10.0f, -(-ceil(maze->mazeHeight / 2) + y));
+                    minimapViewMatrix = GLKMatrix4Multiply(minimapViewMatrix, baseMinimapViewMatrix);
+                    
+                    GLKMatrix4 minimapRotate = GLKMatrix4Rotate(minimapViewMatrix, GLKMathDegreesToRadians(0), 0.0f, 1.0f, 0.0f);
+                    minimapRotate = GLKMatrix4Rotate(minimapRotate, GLKMathDegreesToRadians(90), 1.0f, 0.0f, 0.0f);//debug
+                    minimapFinal = GLKMatrix4Multiply(minimapRotate, baseMinimapViewMatrix);
+                    minimapFinal = GLKMatrix4Rotate(minimapFinal, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
+                }
+                
+                
+                
+
                 
                 MazeSquare *a = [squares objectAtIndex:(x * maze->mazeHeight) + y];
                 switch((SIDE)s) {
@@ -239,29 +263,51 @@ GLfloat gCubeVertexData[216] =
                         if (a->left) {
                             a->leftNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(finalMatrix), NULL);
                             a->leftVertecies= GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                            if (!ConsoleElement.hidden) {
+                                a->leftMinimapNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(minimapFinal), NULL);
+                                a->leftMinimapVerticies = GLKMatrix4Multiply(orthoMatrix, minimapFinal);
+                            }
                         }
                         break;
                     case (SIDE)UP:
                         if (a->up) {
                             a->upNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(finalMatrix), NULL);
-                            a->upVertecies= GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                            a->upVertecies = GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                            if (!ConsoleElement.hidden) {
+                                a->upMinimapNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(minimapFinal), NULL);
+                                a->upMinimapVerticies = GLKMatrix4Multiply(orthoMatrix, minimapFinal);
+                            }
                         }
                         break;
                     case (SIDE)RIGHT:
                         if (a->right) {
                             a->rightNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(finalMatrix), NULL);
                             a->rightVertecies= GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                            if (!ConsoleElement.hidden) {
+                                a->rightMinimapNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(minimapFinal), NULL);
+                                a->rightMinimapVerticies = GLKMatrix4Multiply(orthoMatrix, minimapFinal);
+                            }
                         }
                         break;
                     case (SIDE)DOWN:
                         if (a->down) {
                             a->downNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(finalMatrix), NULL);
                             a->downVertecies= GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                            if (!ConsoleElement.hidden) {
+                                a->downMinimapNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(minimapFinal), NULL);
+                                a->downMinimapVerticies = GLKMatrix4Multiply(orthoMatrix, minimapFinal);
+                            }
                         }
                         break;
                 }
             }
         }
+    }
+    
+    if (mazeViewRotate < mazeViewRotateTo) {
+        mazeViewRotate += 15;
+    } else if (mazeViewRotate > mazeViewRotateTo) {
+        mazeViewRotate -= 15;
     }
     
     PlayerDataLabel.text = [NSString stringWithFormat: @"Player Position: x: %d  y: %d \nPlayer Rotation: %f", mazeXPos, mazeYPos, mazeViewRotate];
@@ -292,24 +338,44 @@ GLfloat gCubeVertexData[216] =
                         if (a->left) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->leftNormals.m);
+                            if (!ConsoleElement.hidden) {
+                                glDrawArrays(GL_TRIANGLES, 0, 36);
+                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftMinimapVerticies.m);
+                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->leftMinimapNormals.m);
+                            }
                         }
                         break;
                     case (SIDE)UP:
                         if (a->up) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->upNormals.m);
+                            if (!ConsoleElement.hidden) {
+                                glDrawArrays(GL_TRIANGLES, 0, 36);
+                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upMinimapVerticies.m);
+                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->upMinimapNormals.m);
+                            }
                         }
                         break;
                     case (SIDE)RIGHT:
                         if (a->right) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->rightNormals.m);
+                            if (!ConsoleElement.hidden) {
+                                glDrawArrays(GL_TRIANGLES, 0, 36);
+                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightMinimapVerticies.m);
+                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->rightMinimapNormals.m);
+                            }
                         }
                         break;
                     case (SIDE)DOWN:
                         if (a->down) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downNormals.m);
+                            if (!ConsoleElement.hidden) {
+                                glDrawArrays(GL_TRIANGLES, 0, 36);
+                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downMinimapVerticies.m);
+                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downMinimapNormals.m);
+                            }
                         }
                         break;
                 }
@@ -477,10 +543,10 @@ GLfloat gCubeVertexData[216] =
         
 }
 - (IBAction)SwipeRight:(UISwipeGestureRecognizer *)sender {
-    mazeViewRotate += 90;
+    mazeViewRotateTo += 90;
 }
 - (IBAction)SwipeLeft:(UISwipeGestureRecognizer *)sender {
-    mazeViewRotate -= 90;
+    mazeViewRotateTo -= 90;
 }
 - (IBAction)SwipeUp:(UISwipeGestureRecognizer *)sender {
     switch((int)mazeViewRotate % 360) {
@@ -519,6 +585,12 @@ GLfloat gCubeVertexData[216] =
             mazeXPos -= 1;
             break;
     }
+}
+- (IBAction)DoubleTap:(UITapGestureRecognizer *)sender {
+    mazeXPos = 0;
+    mazeYPos = 2;
+    mazeViewRotate = 180;
+    mazeViewRotateTo = 180;
 }
 
 @end

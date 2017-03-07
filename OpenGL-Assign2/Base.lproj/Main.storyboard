@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -40,7 +39,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="1" alpha="0.40461793664383561" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -51,6 +50,7 @@
                             <outletCollection property="gestureRecognizers" destination="jM5-b0-wBz" appends="YES" id="19F-An-29j"/>
                             <outletCollection property="gestureRecognizers" destination="bSU-hF-ghN" appends="YES" id="KYT-C0-rFD"/>
                             <outletCollection property="gestureRecognizers" destination="L6u-j7-2Je" appends="YES" id="MJq-Ac-nXM"/>
+                            <outletCollection property="gestureRecognizers" destination="h0Y-9R-Krq" appends="YES" id="wsk-NI-Iiw"/>
                         </connections>
                     </view>
                     <connections>
@@ -59,9 +59,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer numberOfTapsRequired="2" numberOfTouchesRequired="2" id="V0s-S3-htN">
+                <tapGestureRecognizer numberOfTapsRequired="2" numberOfTouchesRequired="2" id="V0s-S3-htN" userLabel="2FingerDoubleTap">
                     <connections>
                         <action selector="OnTap:" destination="BV1-FR-VrT" id="edT-1E-LXk"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="h0Y-9R-Krq" userLabel="DoubleTap">
+                    <connections>
+                        <action selector="DoubleTap:" destination="BV1-FR-VrT" id="m6q-il-7jr"/>
                     </connections>
                 </tapGestureRecognizer>
                 <swipeGestureRecognizer direction="left" id="uem-xr-xbL" userLabel="SwipeLeft">

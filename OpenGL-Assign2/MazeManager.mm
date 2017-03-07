@@ -17,8 +17,8 @@ struct MazeStruct {
 
 - (id)init
 {
-    mazeWidth = 5;
-    mazeHeight = 5;
+    mazeWidth = 9;
+    mazeHeight = 9;
     self = [super init];
     maze = new Maze(mazeWidth, mazeHeight);
     return self;

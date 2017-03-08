@@ -12,8 +12,10 @@
 
 #import <GLKit/GLKit.h>
 
-static const int SQUARE_SIDES = 4;
-typedef enum {RIGHT = 0, UP, LEFT, DOWN} SIDE;
+static const int SQUARE_SIDES = 5;
+typedef enum {RIGHT = 0, UP, LEFT, DOWN, FLOOR} SIDE;
+
+typedef enum {FLOOR_SIDE = 0, NO_SIDES, LEFT_SIDE, RIGHT_SIDE, BOTH_SIDES} TEXTURE_TYPE;
 
 @interface MazeSquare : NSObject {
 @public
@@ -21,18 +23,27 @@ typedef enum {RIGHT = 0, UP, LEFT, DOWN} SIDE;
     bool up;
     bool left;
     bool down;
+    bool floor;
     
     GLKMatrix4 upVertecies;
     GLKMatrix3 upNormals;
+    TEXTURE_TYPE upTex;
     
     GLKMatrix4 downVertecies;
     GLKMatrix3 downNormals;
+    TEXTURE_TYPE downTex;
     
     GLKMatrix4 leftVertecies;
     GLKMatrix3 leftNormals;
+    TEXTURE_TYPE leftTex;
     
     GLKMatrix4 rightVertecies;
     GLKMatrix3 rightNormals;
+    TEXTURE_TYPE rightTex;
+    
+    GLKMatrix4 floorVertecies;
+    GLKMatrix3 floorNormals;
+    TEXTURE_TYPE floorTex;
     
     GLKMatrix4 upMinimapVerticies;
     GLKMatrix3 upMinimapNormals;

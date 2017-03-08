@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EE729A3E1E6E87A70079965E /* crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE729A3D1E6E87A70079965E /* crate.jpg */; };
+		EE729A401E70A4980079965E /* textures in Resources */ = {isa = PBXBuildFile; fileRef = EE729A3F1E70A4980079965E /* textures */; };
 		EECEF2871E69357A0023C09A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2861E69357A0023C09A /* main.m */; };
 		EECEF28A1E69357A0023C09A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EECEF2891E69357A0023C09A /* AppDelegate.m */; };
 		EECEF28C1E69357A0023C09A /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = EECEF28B1E69357A0023C09A /* Shader.fsh */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		EE729A3D1E6E87A70079965E /* crate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crate.jpg; sourceTree = "<group>"; };
+		EE729A3F1E70A4980079965E /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = textures; path = "OpenGL-Assign2/textures"; sourceTree = "<group>"; };
 		EECEF2821E6935790023C09A /* OpenGL-Assign2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenGL-Assign2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EECEF2861E69357A0023C09A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EECEF2881E69357A0023C09A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 		EECEF2791E6935790023C09A = {
 			isa = PBXGroup;
 			children = (
+				EE729A3F1E70A4980079965E /* textures */,
 				EECEF2841E6935790023C09A /* OpenGL-Assign2 */,
 				EECEF2831E6935790023C09A /* Products */,
 			);
@@ -175,6 +178,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE729A401E70A4980079965E /* textures in Resources */,
 				EECEF2941E69357A0023C09A /* Main.storyboard in Resources */,
 				EECEF28E1E69357A0023C09A /* Shader.vsh in Resources */,
 				EECEF2961E69357A0023C09A /* Assets.xcassets in Resources */,
@@ -319,7 +323,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2592K8NH67;
 				INFOPLIST_FILE = "OpenGL-Assign2/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.atomaton.OpenGL-Assign2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -332,7 +336,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 2592K8NH67;
 				INFOPLIST_FILE = "OpenGL-Assign2/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.atomaton.OpenGL-Assign2";
 				PRODUCT_NAME = "$(TARGET_NAME)";

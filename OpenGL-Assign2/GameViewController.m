@@ -41,26 +41,26 @@ GLfloat gCubeVertexData[72] =
 {
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
+    0.48f, -0.5f, -0.5f,
+    0.48f, -0.5f,  0.5f,
     0.5f, -0.5f,  0.5f,
     0.5f, -0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f,  0.5f,
+    0.48f,  0.5f, -0.5f,
+    0.48f,  0.5f,  0.5f,
     0.5f,  0.5f,  0.5f,
     0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
+    0.48f, -0.5f, -0.5f,
+    0.48f,  0.5f, -0.5f,
     0.5f,  0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f, 0.5f,
-    -0.5f,  0.5f, 0.5f,
+    0.48f, -0.5f, 0.5f,
+    0.48f,  0.5f, 0.5f,
     0.5f,  0.5f, 0.5f,
     0.5f, -0.5f, 0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
+    0.48f, -0.5f, -0.5f,
+    0.48f, -0.5f,  0.5f,
+    0.48f,  0.5f,  0.5f,
+    0.48f,  0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
     0.5f, -0.5f,  0.5f,
     0.5f,  0.5f,  0.5f,
@@ -154,7 +154,11 @@ GLuint cubeIndices[36] =
     GLuint _normalBuffer;
     GLuint _textureBuffer;
     GLuint _indexBuffer;
-    GLuint crateTexture;
+    
+    GLuint floorTexture;
+    GLuint bothSideTexture;
+    GLuint leftSideTexture;
+    GLuint rightSideTexture;
     
     //shader data
     GLKVector3 flashlightPosition;
@@ -186,6 +190,7 @@ GLuint cubeIndices[36] =
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
+- (GLuint *)getCorrectTexture:(TEXTURE_TYPE)tex;
 @end
 
 @implementation GameViewController
@@ -318,9 +323,12 @@ GLuint cubeIndices[36] =
     
     // Load in and set texture
     /* use setupTexture to create crate texture */
-    crateTexture = [self setupTexture:@"crate.jpg"];
+    bothSideTexture = [self setupTexture:@"textures/both_sides.png"];
+    floorTexture = [self setupTexture:@"textures/floor.png"];
+    leftSideTexture = [self setupTexture:@"textures/side_left.png"];
+    rightSideTexture = [self setupTexture:@"textures/side_right.png"];
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    //glBindTexture(GL_TEXTURE_2D, crateTexture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
 
     
@@ -377,7 +385,10 @@ GLuint cubeIndices[36] =
                 
                 GLKMatrix4 rotateMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(mazeViewRotate), 0.0f, 1.0f, 0.0f);
                 GLKMatrix4 finalMatrix =GLKMatrix4Multiply(rotateMatrix, baseModelViewMatrix);
-                finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
+                if (s == SQUARE_SIDES - 1) //floor
+                    finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(270), 0.0f, 0.0f, 1.0f);
+                else
+                    finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
                 
                 //minimap
                 GLKMatrix4 minimapFinal = GLKMatrix4Identity;
@@ -438,6 +449,12 @@ GLuint cubeIndices[36] =
                             }
                         }
                         break;
+                    case (SIDE)FLOOR:
+                        if (a->floor) {
+                            a->floorNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(finalMatrix), NULL);
+                            a->floorVertecies= GLKMatrix4Multiply(projectionMatrix, finalMatrix);
+                        }
+                        break;
                 }
             }
         }
@@ -477,6 +494,8 @@ GLuint cubeIndices[36] =
                         if (a->left) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->leftNormals.m);
+                            //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, a->leftViewMatrix.m);
+                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->leftTex]);
                             if (!ConsoleElement.hidden) {
                                 glDrawArrays(GL_TRIANGLES, 0, 36);
                                 glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftMinimapVerticies.m);
@@ -488,6 +507,8 @@ GLuint cubeIndices[36] =
                         if (a->up) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->upNormals.m);
+                            //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, a->upViewMatrix.m);
+                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->upTex]);
                             if (!ConsoleElement.hidden) {
                                 glDrawArrays(GL_TRIANGLES, 0, 36);
                                 glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upMinimapVerticies.m);
@@ -499,6 +520,7 @@ GLuint cubeIndices[36] =
                         if (a->right) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->rightNormals.m);
+                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->rightTex]);
                             if (!ConsoleElement.hidden) {
                                 glDrawArrays(GL_TRIANGLES, 0, 36);
                                 glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightMinimapVerticies.m);
@@ -510,11 +532,19 @@ GLuint cubeIndices[36] =
                         if (a->down) {
                             glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downVertecies.m);
                             glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downNormals.m);
+                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->downTex]);
                             if (!ConsoleElement.hidden) {
                                 glDrawArrays(GL_TRIANGLES, 0, 36);
                                 glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downMinimapVerticies.m);
                                 glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downMinimapNormals.m);
                             }
+                        }
+                        break;
+                    case (SIDE)FLOOR:
+                        if (a->floor) {
+                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->floorVertecies.m);
+                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->floorNormals.m);
+                            glBindTexture(GL_TEXTURE_2D, floorTexture);
                         }
                         break;
                 }
@@ -536,6 +566,23 @@ GLuint cubeIndices[36] =
     }
     
 }
+
+
+- (GLuint *)getCorrectTexture:(TEXTURE_TYPE)tex {
+    switch (tex) {
+        case FLOOR_SIDE:
+        case NO_SIDES:
+            return &(floorTexture);
+        case LEFT_SIDE:
+            return &leftSideTexture;
+        case RIGHT_SIDE:
+            return &rightSideTexture;
+        case BOTH_SIDES:
+            return &bothSideTexture;
+            
+    }
+}
+
 
 #pragma mark -  OpenGL ES 2 shader compilation
 

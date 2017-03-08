@@ -17,6 +17,33 @@
     self->up = u;
     self->right = r;
     self->down = d;
+    self->floor = true;
+    
+    upTex = (TEXTURE_TYPE)NO_SIDES;
+    downTex = (TEXTURE_TYPE)NO_SIDES;
+    rightTex = (TEXTURE_TYPE)NO_SIDES;
+    leftTex = (TEXTURE_TYPE)NO_SIDES;
+    
+    floorTex = (TEXTURE_TYPE)FLOOR_SIDE;
+    
+    if (l) {
+        upTex++;
+        downTex += 2;
+    }
+    if (r) {
+        upTex += 2;
+        downTex++;
+    }
+    if (u) {
+        leftTex += 2;
+        rightTex ++;
+    }
+    if (d) {
+        leftTex ++;
+        rightTex += 2;
+    }
+    
+    
     
     return self;
 }

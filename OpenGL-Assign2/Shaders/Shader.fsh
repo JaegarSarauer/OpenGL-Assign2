@@ -14,6 +14,9 @@ uniform sampler2D texture;
 
 /* set up uniforms for lighting parameters */
 uniform vec3 flashlightPosition;
+uniform vec3 flashlightDirection;
+uniform float cutOff;
+
 uniform vec3 diffuseLightPosition;
 uniform vec4 diffuseComponent;
 uniform float shininess;
@@ -25,21 +28,26 @@ void main()
     vec4 ambient = ambientComponent;
     
     vec3 N = normalize(eyeNormal);
-    float nDotVP = max(0.0, dot(N, normalize(diffuseLightPosition)));
+    float nDotVP = max(1.0, dot(N, normalize(diffuseLightPosition)));
     vec4 diffuse = diffuseComponent * nDotVP;
     
     vec3 E = normalize(-eyePos.xyz);
     vec3 L = normalize(flashlightPosition - eyePos.xyz);
     vec3 H = normalize(L+E);
     float Ks = pow(max(dot(N, H), 0.0), shininess);
-    vec4 specular = Ks*specularComponent;
+    vec4 specular = Ks * specularComponent;
     if( dot(L, N) < 0.0 ) {
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        specular = vec4(0.1, 0.1, 0.1, 1.0);
     }
     
-    /* add ambient and specular components here as in:
-     gl_FragColor = (ambient + diffuse + specular) * texture2D(texture, texCoordOut);
-     */
+    vec2 screen = vec2(1000, 1000);
+    vec2 glFragCoord = vec2(gl_PointCoord.x / screen.x, gl_PointCoord.y / screen.y);
+    float dist = distance(glFragCoord, vec2(0.5, 0.5));
+    float lightValue = 1.0;
+    if (dist < 0.2) {
+        lightValue = 1.0 + (0.2 - dist) * 10.0;
+    }
+    
     gl_FragColor = (ambient + diffuse + specular) * texture2D(texture, texCoordOut);
     gl_FragColor.a = 1.0;
 }

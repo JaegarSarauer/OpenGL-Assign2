@@ -20,6 +20,8 @@ enum
     /* more uniforms needed here... */
     UNIFORM_TEXTURE,
     UNIFORM_FLASHLIGHT_POSITION,
+    UNIFORM_FLASHLIGHT_DIRECTION,
+    UNIFORM_CUTOFF,
     UNIFORM_DIFFUSE_LIGHT_POSITION,
     UNIFORM_SHININESS,
     UNIFORM_AMBIENT_COMPONENT,
@@ -41,26 +43,55 @@ GLfloat gCubeVertexData[72] =
 {
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    0.48f, -0.5f, -0.5f,
-    0.48f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
     0.5f, -0.5f,  0.5f,
     0.5f, -0.5f, -0.5f,
-    0.48f,  0.5f, -0.5f,
-    0.48f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f,  0.5f,
     0.5f,  0.5f,  0.5f,
     0.5f,  0.5f, -0.5f,
-    0.48f, -0.5f, -0.5f,
-    0.48f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
     0.5f,  0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
-    0.48f, -0.5f, 0.5f,
-    0.48f,  0.5f, 0.5f,
+    -0.5f, -0.5f, 0.5f,
+    -0.5f,  0.5f, 0.5f,
     0.5f,  0.5f, 0.5f,
     0.5f, -0.5f, 0.5f,
-    0.48f, -0.5f, -0.5f,
-    0.48f, -0.5f,  0.5f,
-    0.48f,  0.5f,  0.5f,
-    0.48f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f, -0.5f,
+};
+GLfloat gWallVertexData[72] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    0.40f, -0.5f, -0.5f,
+    0.40f, -0.5f,  0.5f,
+    0.5f, -0.5f,  0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.40f,  0.5f, -0.5f,
+    0.40f,  0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f, -0.5f,
+    0.40f, -0.5f, -0.5f,
+    0.40f,  0.5f, -0.5f,
+    0.5f,  0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.40f, -0.5f, 0.5f,
+    0.40f,  0.5f, 0.5f,
+    0.5f,  0.5f, 0.5f,
+    0.5f, -0.5f, 0.5f,
+    0.40f, -0.5f, -0.5f,
+    0.40f, -0.5f,  0.5f,
+    0.40f,  0.5f,  0.5f,
+    0.40f,  0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
     0.5f, -0.5f,  0.5f,
     0.5f,  0.5f,  0.5f,
@@ -112,10 +143,10 @@ GLfloat gCubeTexData[48] =
     0.0f, 1.0f,
     1.0f, 1.0f,
     1.0f, 0.0f,
-    0.0f, 0.0f,
     0.0f, 1.0f,
     1.0f, 1.0f,
     1.0f, 0.0f,
+    0.0f, 0.0f,
     0.0f, 0.0f,
     0.0f, 1.0f,
     1.0f, 1.0f,
@@ -150,7 +181,9 @@ GLuint cubeIndices[36] =
     
     //render data
     GLuint _vertexArray;
+    GLuint _vertexBoxArray;
     GLuint _vertexBuffer;
+    GLuint _vertexBoxBuffer;
     GLuint _normalBuffer;
     GLuint _textureBuffer;
     GLuint _indexBuffer;
@@ -159,14 +192,25 @@ GLuint cubeIndices[36] =
     GLuint bothSideTexture;
     GLuint leftSideTexture;
     GLuint rightSideTexture;
+    GLuint crateTexture;
     
     //shader data
     GLKVector3 flashlightPosition;
+    GLKVector3 flashlightDirection;
+    float cutOff;
     GLKVector3 diffuseLightPosition;
     GLKVector4 diffuseComponent;
     float shininess;
     GLKVector4 specularComponent;
     GLKVector4 ambientComponent;
+    
+    GLKMatrix4 rotatingCubeVertecies;
+    GLKMatrix3 rotatingCubeNormals;
+    GLfloat cubeRotation;
+    
+    BOOL isDay;
+    BOOL isFlashlight;
+    BOOL isFog;
     
     MazeManager *maze;
     
@@ -191,6 +235,8 @@ GLuint cubeIndices[36] =
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
 - (GLuint *)getCorrectTexture:(TEXTURE_TYPE)tex;
+- (void) drawShape:(GLuint)tex array:(GLuint)vArray vertecies:(GLKMatrix4)vert normals:(GLKMatrix3)norm;
+
 @end
 
 @implementation GameViewController
@@ -224,6 +270,10 @@ GLuint cubeIndices[36] =
             [squares addObject:[maze getMazePosition:x y:y]];
         }
     }
+    
+    isDay = true;
+    isFog = false;
+    isFlashlight = false;
     
     [self setupGL];
 }
@@ -270,15 +320,20 @@ GLuint cubeIndices[36] =
     self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
     uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
     uniforms[UNIFORM_FLASHLIGHT_POSITION] = glGetUniformLocation(_program, "flashlightPosition");
+    uniforms[UNIFORM_FLASHLIGHT_DIRECTION] = glGetUniformLocation(_program, "flashlightDirection");
+    uniforms[UNIFORM_CUTOFF] = glGetUniformLocation(_program, "cutOff");
     uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION] = glGetUniformLocation(_program, "diffuseLightPosition");
     uniforms[UNIFORM_SHININESS] = glGetUniformLocation(_program, "shininess");
     uniforms[UNIFORM_AMBIENT_COMPONENT] = glGetUniformLocation(_program, "ambientComponent");
     uniforms[UNIFORM_DIFFUSE_COMPONENT] = glGetUniformLocation(_program, "diffuseComponent");
     uniforms[UNIFORM_SPECULAR_COMPONENT] = glGetUniformLocation(_program, "specularComponent");
     
-    flashlightPosition = GLKVector3Make(0.0, 0.0, 1.0);
+    flashlightPosition = GLKVector3Make(mazeXPos, 0.5, mazeYPos);
+    flashlightDirection = GLKVector3Make(0.0, 1.0, 0.0);
+    cutOff = cos(GLKMathDegreesToRadians(12.5));
+    
     diffuseLightPosition = GLKVector3Make(0.0, 1.0, 0.0);
-    diffuseComponent = GLKVector4Make(0.8, 0.1, 0.1, 1.0);
+    diffuseComponent = GLKVector4Make(.3, .2, .2, 1.0);
     shininess = 100.0;
     specularComponent = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
     ambientComponent = GLKVector4Make(0.2, 0.2, 0.2, 1.0);
@@ -288,28 +343,49 @@ GLuint cubeIndices[36] =
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
-    
-    
     glGenBuffers(1, &_vertexBuffer);
     glGenBuffers(1, &_normalBuffer);
     glGenBuffers(1, &_textureBuffer);
     glGenBuffers(1, &_indexBuffer);
     
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeVertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gWallVertexData, GL_STATIC_DRAW);
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
-    
     
     glBindBuffer(GL_ARRAY_BUFFER, _normalBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeNormalData, GL_STATIC_DRAW);
     glEnableVertexAttribArray(GLKVertexAttribNormal);
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
     
+    glBindBuffer(GL_ARRAY_BUFFER, _textureBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 48, gCubeTexData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * 36, cubeIndices, GL_STATIC_DRAW);
+    
+    glBindVertexArrayOES(0);
     
     
-    //HELLO THERE
+    glGenVertexArraysOES(1, &_vertexBoxArray);
+    glBindVertexArrayOES(_vertexBoxArray);
     
+    glGenBuffers(1, &_vertexBoxBuffer);
+    glGenBuffers(1, &_normalBuffer);
+    glGenBuffers(1, &_textureBuffer);
+    glGenBuffers(1, &_indexBuffer);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBoxBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeVertexData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _normalBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 72, gCubeNormalData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
     
     glBindBuffer(GL_ARRAY_BUFFER, _textureBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 48, gCubeTexData, GL_STATIC_DRAW);
@@ -327,6 +403,7 @@ GLuint cubeIndices[36] =
     floorTexture = [self setupTexture:@"textures/floor.png"];
     leftSideTexture = [self setupTexture:@"textures/side_left.png"];
     rightSideTexture = [self setupTexture:@"textures/side_right.png"];
+    crateTexture = [self setupTexture:@"textures/crate.jpg"];
     glActiveTexture(GL_TEXTURE0);
     //glBindTexture(GL_TEXTURE_2D, crateTexture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
@@ -347,10 +424,12 @@ GLuint cubeIndices[36] =
     [EAGLContext setCurrentContext:self.context];
     
     glDeleteBuffers(1, &_vertexBuffer);
+    glDeleteBuffers(1, &_vertexBoxBuffer);
     glDeleteBuffers(1, &_normalBuffer);
     glDeleteBuffers(1, &_textureBuffer);
     glDeleteBuffers(1, &_indexBuffer);
     glDeleteVertexArraysOES(1, &_vertexArray);
+    glDeleteVertexArraysOES(1, &_vertexBoxArray);
     
     self.effect = nil;
     
@@ -374,6 +453,21 @@ GLuint cubeIndices[36] =
 
     self.effect.transform.projectionMatrix = projectionMatrix;
     
+    //GLKMatrix4 boxStart = GLKMatrix4MakeTranslation(mazeXPos, 0.0f, mazeYPos - 1);
+    //boxStart = GLKMatrix4Scale(boxStart, 2.0f, 2.0f, 4.0f);
+    
+    GLKMatrix4 boxMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
+    boxMatrix = GLKMatrix4Rotate(boxMatrix, GLKMathDegreesToRadians(mazeViewRotate), 0.0f, 1.0f, 0.0f);
+    boxMatrix = GLKMatrix4Translate(boxMatrix, (mazeXPos), 0.0f, (mazeYPos - 1));
+    boxMatrix = GLKMatrix4Rotate(boxMatrix, GLKMathDegreesToRadians(cubeRotation), 1.0f, 1.0f, 1.0f);
+    boxMatrix = GLKMatrix4Scale(boxMatrix, .2f, .2f, .2f);
+    
+    //boxMatrix = GLKMatrix4Multiply(boxStart, boxMatrix);
+    
+    rotatingCubeVertecies = GLKMatrix4Multiply(projectionMatrix, boxMatrix);
+    rotatingCubeNormals = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(boxMatrix), NULL);
+    
+    
     for (int x = 0; x < maze->mazeWidth; x++) {
         for (int y = 0; y < maze->mazeHeight; y++) {
             for (int s = 0; s < SQUARE_SIDES; s++) {
@@ -385,9 +479,10 @@ GLuint cubeIndices[36] =
                 
                 GLKMatrix4 rotateMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(mazeViewRotate), 0.0f, 1.0f, 0.0f);
                 GLKMatrix4 finalMatrix =GLKMatrix4Multiply(rotateMatrix, baseModelViewMatrix);
-                if (s == SQUARE_SIDES - 1) //floor
+                if (s == SQUARE_SIDES - 1) {//floor
                     finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(270), 0.0f, 0.0f, 1.0f);
-                else
+                    finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(90), 1.0f, 0.0f, 0.0f);
+                } else
                     finalMatrix = GLKMatrix4Rotate(finalMatrix, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
                 
                 //minimap
@@ -402,9 +497,6 @@ GLuint cubeIndices[36] =
                     minimapFinal = GLKMatrix4Multiply(minimapRotate, baseMinimapViewMatrix);
                     minimapFinal = GLKMatrix4Rotate(minimapFinal, GLKMathDegreesToRadians(s * 90), 0.0f, 1.0f, 0.0f);
                 }
-                
-                
-                
 
                 
                 MazeSquare *a = [squares objectAtIndex:(x * maze->mazeHeight) + y];
@@ -466,6 +558,8 @@ GLuint cubeIndices[36] =
         mazeViewRotate -= 15;
     }
     
+    cubeRotation += 5;
+    
     PlayerDataLabel.text = [NSString stringWithFormat: @"Player Position: x: %d  y: %d \nPlayer Rotation: %f", mazeXPos, mazeYPos, mazeViewRotate];
 }
 
@@ -474,7 +568,6 @@ GLuint cubeIndices[36] =
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glBindVertexArrayOES(_vertexArray);
     
     // Render the object with GLKit
     //[self.effect prepareToDraw];
@@ -484,6 +577,9 @@ GLuint cubeIndices[36] =
     // Render the object again with ES2
     glUseProgram(_program);
     
+    //draw the rotating cube
+    [self drawShape:crateTexture array:_vertexBoxArray vertecies:rotatingCubeVertecies normals:rotatingCubeNormals];
+    
     for (int x = 0; x < maze->mazeWidth; x++) {
         for (int y = 0; y < maze->mazeHeight; y++) {
             for (int s = 0; s < SQUARE_SIDES; s++) {
@@ -492,81 +588,66 @@ GLuint cubeIndices[36] =
                 switch((SIDE)s) {
                     case (SIDE)LEFT:
                         if (a->left) {
-                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftVertecies.m);
-                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->leftNormals.m);
-                            //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, a->leftViewMatrix.m);
-                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->leftTex]);
+                            [self drawShape:*[self getCorrectTexture:a->leftTex] array:_vertexArray vertecies:a->leftVertecies normals:a->leftNormals];
                             if (!ConsoleElement.hidden) {
-                                glDrawArrays(GL_TRIANGLES, 0, 36);
-                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->leftMinimapVerticies.m);
-                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->leftMinimapNormals.m);
+                                [self drawShape:*[self getCorrectTexture:a->upTex] array:_vertexArray vertecies:a->leftMinimapVerticies normals:a->leftMinimapNormals];
                             }
                         }
                         break;
                     case (SIDE)UP:
                         if (a->up) {
-                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upVertecies.m);
-                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->upNormals.m);
-                            //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, a->upViewMatrix.m);
-                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->upTex]);
+                            [self drawShape:*[self getCorrectTexture:a->upTex] array:_vertexArray vertecies:a->upVertecies normals:a->upNormals];
                             if (!ConsoleElement.hidden) {
-                                glDrawArrays(GL_TRIANGLES, 0, 36);
-                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->upMinimapVerticies.m);
-                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->upMinimapNormals.m);
+                                [self drawShape:*[self getCorrectTexture:a->upTex] array:_vertexArray vertecies:a->upMinimapVerticies normals:a->upMinimapNormals];
                             }
                         }
                         break;
                     case (SIDE)RIGHT:
                         if (a->right) {
-                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightVertecies.m);
-                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->rightNormals.m);
-                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->rightTex]);
+                            [self drawShape:*[self getCorrectTexture:a->rightTex] array:_vertexArray vertecies:a->rightVertecies normals:a->rightNormals];
                             if (!ConsoleElement.hidden) {
-                                glDrawArrays(GL_TRIANGLES, 0, 36);
-                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->rightMinimapVerticies.m);
-                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->rightMinimapNormals.m);
+                                [self drawShape:*[self getCorrectTexture:a->upTex] array:_vertexArray vertecies:a->rightMinimapVerticies normals:a->rightMinimapNormals];
                             }
                         }
                         break;
                     case (SIDE)DOWN:
                         if (a->down) {
-                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downVertecies.m);
-                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downNormals.m);
-                            glBindTexture(GL_TEXTURE_2D, *[self getCorrectTexture:a->downTex]);
+                            [self drawShape:*[self getCorrectTexture:a->downTex] array:_vertexArray vertecies:a->downVertecies normals:a->downNormals];
                             if (!ConsoleElement.hidden) {
-                                glDrawArrays(GL_TRIANGLES, 0, 36);
-                                glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->downMinimapVerticies.m);
-                                glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->downMinimapNormals.m);
+                                [self drawShape:*[self getCorrectTexture:a->upTex] array:_vertexArray vertecies:a->downMinimapVerticies normals:a->downMinimapNormals];
                             }
                         }
                         break;
                     case (SIDE)FLOOR:
                         if (a->floor) {
-                            glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, a->floorVertecies.m);
-                            glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, a->floorNormals.m);
-                            glBindTexture(GL_TEXTURE_2D, floorTexture);
+                            [self drawShape:floorTexture array:_vertexArray vertecies:a->floorVertecies normals:a->floorNormals];
                         }
                         break;
                 }
                 
-                glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
-                glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
-                glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
-                glUniform1f(uniforms[UNIFORM_SHININESS], shininess);
-                glUniform4fv(uniforms[UNIFORM_SPECULAR_COMPONENT], 1, specularComponent.v);
-                glUniform4fv(uniforms[UNIFORM_AMBIENT_COMPONENT], 1, ambientComponent.v);
-                
-                //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _textureBuffer);
-                //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-                //glDrawArrays(GL_TRIANGLES, 0, 36);
             }
         }
     }
     
 }
 
+- (void) drawShape:(GLuint)tex array:(GLuint)vArray vertecies:(GLKMatrix4)vert normals:(GLKMatrix3)norm {
+    glBindVertexArrayOES(vArray);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, vert.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, norm.m);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightDirection.v);
+    glUniform1f(uniforms[UNIFORM_FLASHLIGHT_POSITION], cutOff);
+    glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
+    glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
+    glUniform1f(uniforms[UNIFORM_SHININESS], shininess);
+    glUniform4fv(uniforms[UNIFORM_SPECULAR_COMPONENT], 1, specularComponent.v);
+    glUniform4fv(uniforms[UNIFORM_AMBIENT_COMPONENT], 1, ambientComponent.v);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+}
 
 - (GLuint *)getCorrectTexture:(TEXTURE_TYPE)tex {
     switch (tex) {
@@ -790,6 +871,25 @@ GLuint cubeIndices[36] =
     mazeViewRotate = 180;
     mazeViewRotateTo = 180;
 }
+- (IBAction)DayNightSwitch:(UISwitch *)sender {
+    isDay = sender.isOn;
+    if (isDay) {
+        diffuseComponent = GLKVector4Make(.3, .2, .2, 1.0);
+        ambientComponent = GLKVector4Make(0.2, 0.2, 0.2, 1.0);
+    } else {
+        diffuseComponent = GLKVector4Make(0.8, 0.8, 0.8, 1.0);
+        ambientComponent = GLKVector4Make(0.2, 0.2, 0.2, 1.0);
+    }
+}
+- (IBAction)FlashlightSwitch:(UISwitch *)sender {
+    isFlashlight = sender.isOn;
+}
+- (IBAction)FogSwitch:(UISwitch *)sender {
+    isFog = sender.isOn;
+}
+
+
+
 
 // Load in and set up texture image (adapted from Ray Wenderlich)
 - (GLuint)setupTexture:(NSString *)fileName

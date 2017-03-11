@@ -9,6 +9,8 @@ precision mediump float;
 varying vec3 eyeNormal;
 varying vec4 eyePos;
 varying vec2 texCoordOut;
+varying vec4 distancePos;
+
 /* set up a uniform sampler2D to get texture */
 uniform sampler2D texture;
 
@@ -16,6 +18,7 @@ uniform sampler2D texture;
 uniform vec3 flashlightPosition;
 uniform vec3 flashlightDirection;
 uniform float cutOff;
+uniform bool fog;
 
 uniform vec3 diffuseLightPosition;
 uniform vec4 diffuseComponent;
@@ -40,14 +43,22 @@ void main()
         specular = vec4(0.1, 0.1, 0.1, 1.0);
     }
     
-    vec2 screen = vec2(1000, 1000);
-    vec2 glFragCoord = vec2(gl_PointCoord.x / screen.x, gl_PointCoord.y / screen.y);
-    float dist = distance(glFragCoord, vec2(0.5, 0.5));
-    float lightValue = 1.0;
-    if (dist < 0.2) {
-        lightValue = 1.0 + (0.2 - dist) * 10.0;
+    //flashlight
+    float flashLightValue = 1.0;
+    vec4 flashVec = vec4(flashlightPosition.x * 1.5, flashlightPosition.y * 1.5, 0.0, 0.0);
+    float dis = distance(flashVec, gl_FragCoord);
+    if (dis < cutOff) {
+        flashLightValue += min(1.0, (cutOff - dis) / (cutOff * 0.5));
     }
     
-    gl_FragColor = (ambient + diffuse + specular) * texture2D(texture, texCoordOut);
+    if (fog) {
+        float dis = distance(eyePos, distancePos);
+        float fogValue = max(0.0, min(10.0, (dis - 3.0) / 2.0));
+        ambient.xyzw += fogValue;
+        diffuse.xyzw += fogValue;
+        specular.xyzw += fogValue;
+    }
+    
+    gl_FragColor = (ambient + diffuse * flashLightValue + specular * flashLightValue) * (texture2D(texture, texCoordOut));
     gl_FragColor.a = 1.0;
 }

@@ -22,6 +22,7 @@ enum
     UNIFORM_FLASHLIGHT_POSITION,
     UNIFORM_FLASHLIGHT_DIRECTION,
     UNIFORM_CUTOFF,
+    UNIFORM_FOG,
     UNIFORM_DIFFUSE_LIGHT_POSITION,
     UNIFORM_SHININESS,
     UNIFORM_AMBIENT_COMPONENT,
@@ -198,6 +199,7 @@ GLuint cubeIndices[36] =
     GLKVector3 flashlightPosition;
     GLKVector3 flashlightDirection;
     float cutOff;
+    bool fog;
     GLKVector3 diffuseLightPosition;
     GLKVector4 diffuseComponent;
     float shininess;
@@ -210,7 +212,6 @@ GLuint cubeIndices[36] =
     
     BOOL isDay;
     BOOL isFlashlight;
-    BOOL isFog;
     
     MazeManager *maze;
     
@@ -272,7 +273,6 @@ GLuint cubeIndices[36] =
     }
     
     isDay = true;
-    isFog = false;
     isFlashlight = false;
     
     [self setupGL];
@@ -322,16 +322,17 @@ GLuint cubeIndices[36] =
     uniforms[UNIFORM_FLASHLIGHT_POSITION] = glGetUniformLocation(_program, "flashlightPosition");
     uniforms[UNIFORM_FLASHLIGHT_DIRECTION] = glGetUniformLocation(_program, "flashlightDirection");
     uniforms[UNIFORM_CUTOFF] = glGetUniformLocation(_program, "cutOff");
+    uniforms[UNIFORM_FOG] = glGetUniformLocation(_program, "fog");
     uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION] = glGetUniformLocation(_program, "diffuseLightPosition");
     uniforms[UNIFORM_SHININESS] = glGetUniformLocation(_program, "shininess");
     uniforms[UNIFORM_AMBIENT_COMPONENT] = glGetUniformLocation(_program, "ambientComponent");
     uniforms[UNIFORM_DIFFUSE_COMPONENT] = glGetUniformLocation(_program, "diffuseComponent");
     uniforms[UNIFORM_SPECULAR_COMPONENT] = glGetUniformLocation(_program, "specularComponent");
     
-    flashlightPosition = GLKVector3Make(mazeXPos, 0.5, mazeYPos);
+    flashlightPosition = GLKVector3Make([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height, 0.0);
     flashlightDirection = GLKVector3Make(0.0, 1.0, 0.0);
-    cutOff = cos(GLKMathDegreesToRadians(12.5));
-    
+    cutOff = 300.0;
+    fog = true;
     diffuseLightPosition = GLKVector3Make(0.0, 1.0, 0.0);
     diffuseComponent = GLKVector4Make(.3, .2, .2, 1.0);
     shininess = 100.0;
@@ -637,8 +638,9 @@ GLuint cubeIndices[36] =
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, norm.m);
     glBindTexture(GL_TEXTURE_2D, tex);
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightDirection.v);
-    glUniform1f(uniforms[UNIFORM_FLASHLIGHT_POSITION], cutOff);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIRECTION], 1, flashlightDirection.v);
+    glUniform1f(uniforms[UNIFORM_CUTOFF], cutOff);
+    glUniform1f(uniforms[UNIFORM_FOG], fog);
     glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
     glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
     glUniform1f(uniforms[UNIFORM_SHININESS], shininess);
@@ -883,9 +885,14 @@ GLuint cubeIndices[36] =
 }
 - (IBAction)FlashlightSwitch:(UISwitch *)sender {
     isFlashlight = sender.isOn;
+    if (isFlashlight) {
+        cutOff = 300.0;
+    } else {
+        cutOff = 0.0;
+    }
 }
 - (IBAction)FogSwitch:(UISwitch *)sender {
-    isFog = sender.isOn;
+    fog = sender.isOn;
 }
 
 

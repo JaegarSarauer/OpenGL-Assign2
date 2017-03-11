@@ -14,6 +14,8 @@ varying vec3 eyeNormal;
 varying vec4 eyePos;
 varying vec2 texCoordOut;
 
+varying vec4 distancePos;
+
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat3 normalMatrix;
@@ -31,4 +33,6 @@ void main()
     
     // Set gl_Position with transformed vertex position
     gl_Position = modelViewProjectionMatrix * position;
+    
+    distancePos = gl_Position;
 }
